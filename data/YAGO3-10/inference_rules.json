@@ -1,0 +1,123 @@
+[
+    {
+      "path": ["graduatedFrom", "isLocatedIn"],
+      "new_relation": "wasEducatedIn",
+      "mode": "forward"
+    },
+    {
+      "path": ["hasChild", "hasChild"],
+      "new_relation": "hasGrandchild",
+      "mode": "forward"
+    },
+    {
+      "path": ["isLeaderOf", "isLocatedIn"],
+      "new_relation": "livesIn",
+      "mode": "forward"
+    },
+    {
+      "path": ["owns", "isLocatedIn"],
+      "new_relation": "hasBusinessIn",
+      "mode": "forward"
+    },
+    {
+      "path": ["actedIn", "directed"],
+      "new_relation": "collaboratedWith",
+      "mode": "cross"
+    },
+    {
+      "path": ["actedIn", "wroteMusicFor"],
+      "new_relation": "sharedCreativeWork",
+      "mode": "cross"
+    },
+    {
+      "path": ["isAffiliatedTo", "hasNeighbor"],
+      "new_relation": "collaboratesWith",
+      "mode": "forward"
+    },
+    {
+      "path": ["created", "exports"],
+      "new_relation": "tradesWith",
+      "mode": "forward"
+    },
+    {
+      "path": ["hasAcademicAdvisor", "graduatedFrom"],
+      "new_relation": "academicLineageFrom",
+      "mode": "forward"
+    },
+    {
+      "path": ["playsFor", "isLocatedIn"],
+      "new_relation": "livesIn",
+      "mode": "forward"
+    },
+    {
+      "path": ["isCitizenOf", "hasCapital"],
+      "new_relation": "residesInCapital",
+      "mode": "forward"
+    },
+    {
+      "path": ["hasAcademicAdvisor", "hasAcademicAdvisor"],
+      "new_relation": "academicAncestor",
+      "mode": "forward"
+    },
+    {
+      "path": ["directed", "edited"],
+      "new_relation": "sharedCreativeWork",
+      "mode": "cross"
+    },
+    {
+      "path": ["graduatedFrom", "hasNeighbor"],
+      "new_relation": "hasAcademicConnectionTo",
+      "mode": "forward"
+    },
+    {
+      "path": ["created", "isLocatedIn"],
+      "new_relation": "hasOfficeIn",
+      "mode": "forward"
+    }, 
+    {
+      "path": ["graduatedFrom", "isLocatedIn"],
+      "new_relation": "wasEducatedIn",
+      "mode": "forward"
+    },
+    {
+      "path": ["graduatedFrom", "hasNeighbor"],
+      "new_relation": "hasAcademicConnectionTo",
+      "mode": "forward"
+    },
+    {
+      "path": ["graduatedFrom", "hasCapital"],
+      "new_relation": "studiedNearCapital",
+      "mode": "forward"
+    },
+    {
+      "path": ["hasChild", "hasChild"],
+      "new_relation": "hasGrandchild",
+      "mode": "forward"
+    },
+    {
+      "path": ["hasChild", "graduatedFrom"],
+      "new_relation": "childGraduatedFrom",
+      "mode": "forward"
+    },
+    {
+      "path": ["actedIn", "directed"],
+      "new_relation": "collaboratedWith",
+      "mode": "cross"
+    },
+    {
+      "path": ["actedIn", "wroteMusicFor"],
+      "new_relation": "sharedCreativeWork",
+      "mode": "cross"
+    },
+    {
+      "path": ["actedIn", "edited"],
+      "new_relation": "sharedCreativeWork",
+      "mode": "cross"
+    },
+    {
+      "path": ["directed", "edited"],
+      "new_relation": "coDirectedOrEdited",
+      "mode": "cross"
+    }
+]
+  

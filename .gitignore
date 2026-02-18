@@ -1,0 +1,13 @@
+# Model checkpoints
+*.pt
+
+# Log files
+*.log
+
+# Experiment outputs and caches
+lora_model_icews/
+outputs_ft_implicit/
+unsloth_compiled_cache/
+wandb/
+lora_model_nbatransaction/
+
