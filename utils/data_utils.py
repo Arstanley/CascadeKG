@@ -176,17 +176,12 @@ def get_id2rel(path):
             ret[id] = token
     return ret
 
-def get_entity2id(path, dataset='NBA'):
+def get_entity2id(path, dataset='icews14'):
     entity2id = {}
     
     with open(f'{path}/entity2id.txt') as f:
         lines = f.readlines()
         lines = [line.strip() for line in lines]        
-        if dataset == 'NBA':
-            for line in lines[1:]:
-                ent_id = line.split("\t")
-                ent, id = ent_id[0], int(ent_id[1])
-                entity2id[ent] = id
         if dataset == 'icews14':
             for line in lines:
                 ent_id = line.split("\t")
@@ -200,17 +195,12 @@ def get_entity2id(path, dataset='NBA'):
 
     return entity2id
 
-def get_relation2id(path, dataset='nba'):
+def get_relation2id(path, dataset='icews14'):
     relation2id = {}
 
     with open(f'{path}/relation2id.txt') as f:
         lines = f.readlines()
         lines = [line.strip() for line in lines]        
-        if dataset == 'NBA':
-            for line in lines[1:]:
-                ent_id = line.split("\t")
-                ent, id = ent_id[0], int(ent_id[1])
-                relation2id[ent] = id
         if dataset == 'icews14':
             for line in lines:
                 ent_id = line.split("\t")
@@ -415,90 +405,6 @@ def load_split_data_icews(data_path, split, node_emb, entity2id, relation2id):
         subgraph_after_pyG = triplets_to_graph(subgraph_after_triplets, node_emb)
 
         ret.append((trigger_event, subgraph_before_pyG, subgraph_intermediate_pyG, subgraph_after_pyG, paragraph)) 
-    return ret
-
-def load_data_nba(path):
-    # Load Embedding
-    node_emb = create_node_features(get_entity2id(path))
-    id2ent = get_id2ent(path)
-    id2rel = get_id2rel(path)
-
-    # Load different splits 
-    train_data = load_split_data_nba(path, 'train', node_emb, id2ent, id2rel)
-    valid_data = load_split_data_nba(path, 'valid', node_emb, id2ent, id2rel)
-    test_data = load_split_data_nba(path, 'test', node_emb, id2ent, id2rel)
-
-    num_rel = get_num_rel(path)
-
-    return train_data, valid_data, test_data, num_rel
-
-def triplets_to_language(triplets, id2ent, id2rel):
-    return f"{id2ent[triplets[0]]} {id2rel[triplets[1]]} {id2ent[triplets[2]]}"
-
-def load_split_data_nba(data_path, split, node_emb, id2ent, id2rel):
-    """
-        Helper function to load data.
-        Output: 
-        1) the original subgraph.
-        2) the subgraph with the directly changed triplets.
-        3) the final modified subgraph 
-    """
-    paragraph_data_path = f'{data_path}/{split}_gupdate_paragraphs.jsonl'
-    paragraph_df = pd.read_json(path_or_buf=paragraph_data_path, lines=True)
-
-    data_path = f'{data_path}/NBAtransactions_{split}.json'
-    with open(data_path) as f:
-        data = json.load(f)
-    ret = []
-    for i,d in enumerate(tqdm(data)): 
-        paragraph_data = paragraph_df.iloc[i]
-        paragraph = paragraph_data['paragraph']
-
-        subgraph_before = d['subgraph_before']
-        subgraph_before_pyG = triplets_to_graph(subgraph_before, node_emb)
-
-        subgraph_after = d['subgraph_after']
-        subgraph_after_pyG = triplets_to_graph(subgraph_after, node_emb)
-
-        entities = d['text_mentioned_entities']
-
-        # Convert lists to sets for set operations
-        G1_set = set(tuple(triplet) for triplet in subgraph_before)
-        G2_set = set(tuple(triplet) for triplet in subgraph_after)
-
-        # Calculate added and deleted triplets
-        added_triplets = G2_set - G1_set
-        deleted_triplets = G1_set - G2_set
-        
-        direct_change_triplets_add = []
-        direct_change_triplets_del = []
-
-        # Get the direct change triplets (IE-GOLD)
-        direct_change_triplets_add = []
-        direct_change_triplets_del = []
-        for triplet in added_triplets:
-            if triplet[0] in entities and triplet[2] in entities:
-                direct_change_triplets_add.append(triplet) 
-        for triplet in deleted_triplets:
-            if triplet[0] in entities and triplet[2] in entities:
-                direct_change_triplets_del.append(triplet)
-
-        subgraph_intermediate = subgraph_before.copy()
-        for tri in direct_change_triplets_add:
-            if tri not in subgraph_intermediate:
-                subgraph_intermediate.append(tri)
-        for tri in direct_change_triplets_del:
-            if tri in subgraph_intermediate:
-                subgraph_intermediate.remove(tri)
-
-        subgraph_intermediate_pyG = triplets_to_graph(subgraph_intermediate, node_emb)
-
-        direct_change_triplets_add_text = [triplets_to_language(triplet, id2ent, id2rel) for triplet in direct_change_triplets_add]
-        direct_change_triplets_del_text = [triplets_to_language(triplet, id2ent, id2rel) for triplet in direct_change_triplets_del]
-
-        direct_change_triplets_add_text.extend(direct_change_triplets_del_text)
-        ret.append((direct_change_triplets_add_text, subgraph_before_pyG, subgraph_intermediate_pyG, subgraph_after_pyG, paragraph))
-
     return ret
 
 if __name__ == "__main__":
