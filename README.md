@@ -58,6 +58,3 @@ tqdm
 
 The code expects processed ICEWS14-Event and YAGO-Event datasets in `./data/`. Data processing scripts are included in `data/icews14/` and `data/YAGO3-10/`.
 
-## License
-
-Code released for anonymous review purposes.
