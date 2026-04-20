@@ -1,4 +1,4 @@
-# CASCADEKG
+# CascadeKG
 
 This repository contains the code for the paper **"Risk-Controlled Event-Driven Cascading Updates for Knowledge Graph Consistency Restoration"**.
 
